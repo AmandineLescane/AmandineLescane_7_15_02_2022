@@ -1,6 +1,6 @@
 # GROUPOMANIA , réseau social d'entreprise.
 
-=C'est le 7éme et dernier projet de la formation développeur web d'Open Classroom.
+## C'est le 7éme et dernier projet de la formation développeur web d'Open Classroom.
 
 *********************
 

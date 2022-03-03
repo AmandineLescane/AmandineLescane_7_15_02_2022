@@ -16,7 +16,6 @@ exports.signup = (req, res) => {
                     prenom : req.body.prenom,
                     email : emailCrypt,
                     password : hash,
-                    avatar : image,
                     admin : false,
                 });
                 user
@@ -61,18 +60,22 @@ exports.login = (req, res) => {
 
 //afficher compte utilisateur
 exports.getOneUser = (req, res) => {
-    User.findOne({ where : { email : emailCrypt }})
+    User.findOne({ where : { id: req.params.id }})
     .then(user => res.status(200).json(user))
     .catch(error => res.status(404).json({ error }));
 };
 
 //désactiver compte utilisateur
 exports.deactivateUser = (req, res) => {
-    User.update({
-        nom : "anonyme",
-        prenom : "utilisateur", 
-    });
-    user
-        .save
-        .then(() => res.status(200).json({ message: "Compte utilisateur désactivé" }));
+    User.findOne({where: {id : req.params.id}})
+    .then(()=> {
+        User.set({where: {id : req.params.id}})({
+            nom : "anonyme",
+            prenom : "utilisateur", 
+        });
+        user.save
+        .then(() => res.status(200).json({ message: "Compte utilisateur désactivé" }))
+        .catch(error => res.status(400).json({ error }));
+    })
+    .catch (error => res.status(500).json({ error }));
 }

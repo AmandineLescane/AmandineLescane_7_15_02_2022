@@ -6,6 +6,11 @@ const path = require('path');
 const helmet = require('helmet');
 const mysql = require('mysql2');
 
+const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
+const likeRoutes = require('./routes/like');
+
 app.use(express.json());
 app.use(helmet());
 
@@ -32,8 +37,13 @@ try {
     console.error('Unable to connect to the database:', error);
 }
 
+//routes
+app.use('api/user', userRoutes);
+app.use('api/post', postRoutes);
+app.use('api/post', likeRoutes);
+app.use('api/comment', commentRoutes);
 
-//app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
 

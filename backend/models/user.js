@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize')
+const { DataTypes } = require('sequelize')
 const sequelize = require("../app");
 const Comment = require("./comment");
 const Post = require ("./post");
@@ -21,17 +21,11 @@ const User = sequelize.define("User", {
         type: DataTypes.STRING,
         allowNull : false,
     },
-    avatar : {
-        type: DataTypes.BLOB,
-        default : {},
-    },
-    admin : {
-        type: DataTypes.BOOLEAN,
-        allowNull : false,
-    },
 });
+
+module.exports = User;
 
 User.hasMany(Comment);
 User.hasMany(Post);
 
-module.exports = User;
+User.sync();

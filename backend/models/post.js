@@ -8,12 +8,12 @@ const Post = sequelize.define("Post", {
         type: DataTypes.TEXT,
         allowNull: false, 
     },
-    content: {
+    post_content: {
         type: DataTypes.TEXT,
         allowNull: false, 
     }, 
     image: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     like:{

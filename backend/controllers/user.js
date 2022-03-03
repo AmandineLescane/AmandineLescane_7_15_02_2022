@@ -7,7 +7,6 @@ const User = require('../models/user');
 //création de l'utilisateur
 exports.signup = (req, res) => {
         const emailCrypt = cryptojs.SHA256(req.body.email, process.env.SECRET_TOKEN).toString();
-        //const image = `${req.protocol}://${req.get('host')}/images/profile/`
         bcrypt
             .hash(req.body.password, 10)
             .then((hash) => {
@@ -16,7 +15,6 @@ exports.signup = (req, res) => {
                     prenom : req.body.prenom,
                     email : emailCrypt,
                     password : hash,
-                    admin : false,
                 });
                 user
                     .save()
@@ -43,7 +41,7 @@ exports.login = (req, res) => {
                     }
                     else {
                     res.status(200).json({
-                        userId : user._id,
+                        user_id : user._id,
                         token: jwt.sign(
                             { userId: user._id },
                             process.env.SECRET_TOKEN,

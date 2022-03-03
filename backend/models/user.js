@@ -10,7 +10,7 @@ const User = sequelize.define("User", {
     },
     prenom : {
         type: DataTypes.STRING,
-        allowNull : false
+        allowNull : false,
     },
     email : {
         type: DataTypes.STRING,
@@ -21,6 +21,11 @@ const User = sequelize.define("User", {
         type: DataTypes.STRING,
         allowNull : false,
     },
+    isAdmin : {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        default: false,
+    }
 });
 
 module.exports = User;

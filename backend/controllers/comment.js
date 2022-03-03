@@ -29,12 +29,19 @@ exports.createComment = (req, res) => {
 
 //supprimer un commentaire
 exports.deleteComment = (req, res) => {
-    Comment.findOne({
-        where: {id : req.params.id},
+    const userId = User.findOne({where : {id : req.params.id}});
+    
+    Comment.findOne({where: {id : req.params.id}})
+    .then(() => {
+        if(id === userId || req.token.isAdmin === true){
+            Comment.destroy({
+                where: {id : req.params.id},
+            })
+            .then(() => res.status(200).json({ message: "Commentaire supprimé !"}))
+            .catch(error => res.status(400).json({ error }));
+        } else {
+            res.status(401).json({ error });
+        }
     })
-    Comment.destroy({
-        where: {id : req.params.id},
-    })
-    .then(() => res.status(200).json({ message: "Commentaire supprimé !"}))
     .catch(error => res.status(400).json({ error }));
 }

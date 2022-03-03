@@ -1,4 +1,5 @@
 const fs = require ('fs');
+const { post } = require('../app');
 const Post = require('../models/post');
 const User = require('../models/user');
 
@@ -17,14 +18,21 @@ exports.createPost = (req,res) => {
 
 //suppression d'un post
 exports.deletePost = (req, res) => {
-    Post.findOne({
-        where : {id : req.params.id},
-    })
+    const userId = User.findOne({where : {id : req.params.id},})
+
+    Post.findOne({where: {id : req.params.id}})
+    .then(() => {
+        if(id === userId || req.token.isAdmin === true){
         Post.destroy({
             where : {id : req.params.id},
             })
             .then(() => res.status(200).json({ message: 'Post supprimé !'}))
             .catch(error => res.status(400).json({ error }));
+        } else {
+            res.status(401).json({ error });
+        }
+    })
+    .catch(error => res.status(400).json({ error }));
 }
 
 //affichage des posts

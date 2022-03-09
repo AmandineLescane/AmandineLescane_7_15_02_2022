@@ -79,10 +79,11 @@ form{
     background-color : #f9d7d6;
     color: black;
     font-weight: bold;
-    transition: cubic-bezier(.2, 3, .4, 1) .4s;
+    transition: cubic-bezier(.03,.36,.63,1.17) .3s;
     &:hover{
         transform: scale(1.1);
-}
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    }
 }
 a{
     color: #ed4033;;

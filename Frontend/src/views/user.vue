@@ -72,6 +72,7 @@ export default {
     transition: cubic-bezier(.2, 3, .4, 1) .4s;
     &:hover{
         transform: scale(1.1);
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     }
 }
 

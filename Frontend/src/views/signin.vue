@@ -2,11 +2,11 @@
     <div class="div_img">
         <img src="../assets/icon-above-font.png"  alt="auth_img" class="auth_img">
     </div>
-    <div class="auth_bloc">
+    <div class="auth_block">
         <div class="auth_title">
-            <h2>Authentification</h2>
-            <h3>Je n'ai pas encore de compte</h3>
-            <a href="./login.vue"><h5>J'ai un compte</h5></a>
+            <h2>Bienvenue !</h2>
+            <h3>Je crée mon compte</h3>
+            <a href="./login"><h5>J'ai un compte</h5></a>
         </div>
         <form>
             <input type="text" name="firstname" placeholder="Prénom">
@@ -23,15 +23,17 @@
 </script>
 
 <style lang="scss" scoped> 
-.auth_bloc{
+.auth_block{
     background : #ffebeb;
     border-radius : 50px;
     padding-top : 10px;
     padding-bottom: 10px;
+    border: solid 2px #f9d7d6;
+    margin: 15px;
 }
 .auth_title{
     display : flex;
-    font-family: 'Roboto';
+    font-family: 'Quicksand';
     color: #ed4033;
     flex-direction : column;
     align-items : center; 
@@ -74,12 +76,12 @@ form{
 }
 .input_signin{
     width: 50%;
+    font-family: 'Quicksand';
     background-color : #f9d7d6;
     color: black;
     font-weight: bold;
     transition: cubic-bezier(.2, 3, .4, 1) .4s;
     &:hover{
-        dar: 50%;
         transform: scale(1.1);
 }
 }

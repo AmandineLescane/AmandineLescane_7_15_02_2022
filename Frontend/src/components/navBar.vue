@@ -2,8 +2,8 @@
     <nav class="nav">
 		<a href="/feed"><h3 class="nav_title">Groupomania</h3></a>
 		<ul class="nav_list">
-			<a href="/user"><li class="nav_item">Compte</li></a>
-			<a href=""><li class="nav_item">Déconnexion</li></a>
+			<router-link to="/user"><li class="nav_item">Compte</li></router-link>
+			<router-link to="/login"><li class="nav_item">Déconnexion</li></router-link>
 		</ul>
 	</nav>
 </template>

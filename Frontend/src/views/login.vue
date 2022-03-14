@@ -6,18 +6,55 @@
         <div class="auth_title">
             <h2>Bienvenue !</h2>
             <h3>Je me connecte à mon compte</h3>
-            <a href="./signin"><h5>Je n'ai pas de compte</h5></a>
+            <router-link to="/signup"><h5>Je n'ai pas de compte</h5></router-link>
         </div>
         <form>
             <input type="text" name="email" placeholder="Email">
             <input type="text" name="password" placeholder="Mot de passe">
-            <input class="input_signin" type="submit" value="Se connecter">
+            <input class="input_login" type="submit" value="Se connecter" v-on:click="login()">
         </form>
+        <p>{{ formErr }}</p>
     </div>
 
 </template>
 
 <script>
+export default {
+    name : "login",
+    data(){
+        return {
+            email: "",
+            password: "",
+            formErr: null,
+        }
+    },
+    methods: {
+        login(){
+            const user = {
+                email: this.email,
+                password: this.password,
+            }
+            fetch('http://localhost:3000/api/user/login', {
+                method: 'POST',
+                body: JSON.stringify(user),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors',
+            })
+            .then(res => {
+                if(res.status === 200){
+                    localStorage.setItem("userLog", JSON.stringify(res.data));
+                    this.$router.push('/feed');
+                }
+            })
+            .catch(()=> {
+                localStorage.clear();
+                alert ("L'adresse email et le mot de passe renseignés ne sont pas valides")
+            })
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped> 
@@ -74,7 +111,7 @@ form{
         height: 30px;
     }
 }
-.input_signin{
+.input_login{
     width: 50%;
     background-color : #f9d7d6;
     color: black;

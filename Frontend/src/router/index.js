@@ -1,13 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
-import signin from "../views/signin.vue";
+import signup from "../views/signup.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/signin",
-      name: "signin",
-      component: () => import ('../views/signin.vue')
+      path : "/",
+      redirect : "/signup",
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      component: () => import ('../views/signup.vue')
     },
     {
       path: "/login",

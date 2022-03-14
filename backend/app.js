@@ -1,11 +1,10 @@
 require('dotenv').config();
-const { Sequelize } = require('sequelize');
 const express = require('express');
 const app = express();
 const path = require('path');
 const helmet = require('helmet');
-const mysql = require('mysql2');
 
+//importation des routes
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
@@ -22,20 +21,6 @@ app.use((req, res, next) => {
     res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
     next();
 });
-
-//connexion à la base de données
-const sequelize = new Sequelize (process.env.DB, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host : "localhost",
-    dialect : "mysql",
-});
-
-//test de la connexion
-try {
-    sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-} catch (error) {
-    console.error('Unable to connect to the database:', error);
-}
 
 //routes
 app.use('api/user', userRoutes);

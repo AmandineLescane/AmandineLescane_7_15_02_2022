@@ -1,5 +1,3 @@
-const fs = require ('fs');
-const { post } = require('../app');
 const Post = require('../models/post');
 const User = require('../models/user');
 

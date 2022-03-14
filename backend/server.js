@@ -1,6 +1,10 @@
 const http = require('http');
 const app = require('./app');
 
+//connection bdd
+const db = require("./config/db");
+db.sequelize.sync();
+
 const normalizePort = val => {
     const port = parseInt(val, 10);
     if (isNaN(port)) {

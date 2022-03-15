@@ -6,7 +6,7 @@
         <div class="auth_title">
             <h2>Bienvenue !</h2>
             <h3>Je crée mon compte</h3>
-            <router-link to="/login"><h5>J'ai un compte</h5></router-link>
+            <router-link to="/login"><h5>J'ai déjà un compte</h5></router-link>
         </div>
         <form>
             <input type="text" name="prenom" placeholder="Prénom" v-model="prenom">
@@ -40,6 +40,10 @@ export default {
                 email: this.email, 
                 password: this.password,
             };
+            let login = {
+                email: this.email, 
+                password: this.password,
+            };
 
             const regExpEmail = ('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
             const regExpPassword = ("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
@@ -70,7 +74,9 @@ export default {
                     })
                     .then(res => {
                         if(res.status === 200){
-                            localStorage.setItem("userLog", JSON.stringify(res.data));
+                            const content = res.json();
+                            localStorage.setItem("userLog", JSON.stringify(content));
+                            localStorage.setItem("token", JSON.stringify(content.token));
                             this.$router.push('/feed');
                         }
                     })

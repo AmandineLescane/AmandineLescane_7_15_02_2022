@@ -44,13 +44,15 @@ export default {
             })
             .then(res => {
                 if(res.status === 200){
-                    localStorage.setItem("userLog", JSON.stringify(res.data));
+                    const content = res.json();
+                    localStorage.setItem("userLog", JSON.stringify(content));
+                    localStorage.setItem("token", JSON.stringify(content.token));
                     this.$router.push('/feed');
                 }
             })
             .catch(()=> {
                 localStorage.clear();
-                alert ("L'adresse email et le mot de passe renseignés ne sont pas valides")
+                return this.formErr = "L'adresse email et/ou le mot de passe renseigné ne correspondent pas";
             })
         }
     }

@@ -8,16 +8,16 @@
             <h1>Mon compte </h1>
         </div>
         <div class="user_name">
-            <h4>Prénom : </h4>
+            <h4>Prénom : {{userLog.name}}</h4>
         </div>
         <div class="user_lastname">
-            <h4>Nom : </h4>
+            <h4>Nom : {{userLog.lastName}}</h4>
         </div>
         <div class="user_email">
-            <h4>Adresse mail : </h4>
+            <h4>Adresse mail : {{userLog.email}}</h4>
         </div>
         <div>
-            <input class="user_deactivate" type="button" value="Désactiver compte">
+            <input class="user_deactivate" type="button" value="Désactiver compte" v-if="id === userLog.id || userLog.isAdmin === true" @click="deleteAccount()">
         </div>
     </div>
 </template>
@@ -25,13 +25,33 @@
 <script>
 import navBar from '../components/navBar.vue'
 
-
 export default {
-    name: "feed",
+    name: "user",
     components:{
         navBar, 
     },
-}
+    data(){
+        return{
+            userLog : "",
+        }
+    }
+    deleteAccount(){
+        let params = new URLSearchParams(window.location.search);
+        let userId = params.get("id");
+
+        fetch(`http://localhost:3000/api/user/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            Authorization : `Bearer ${localStorage.getItem("token")}`,
+        })
+        .then((res) => console.log(res)
+        .catch((err) => console.log(err));
+        localStorage.clear();
+        this.$router.push("/login");
+    }
+    }
 </script>
 
 <style lang="scss" scoped>

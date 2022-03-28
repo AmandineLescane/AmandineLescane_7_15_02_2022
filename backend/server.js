@@ -1,8 +1,8 @@
 const http = require('http');
 const app = require('./app');
 
-//connection bdd
-const db = require("./config/db");
+//connexion bdd
+const db = require('./config/db');
 db.sequelize.sync();
 
 const normalizePort = val => {

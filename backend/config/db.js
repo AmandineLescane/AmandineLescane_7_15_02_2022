@@ -10,15 +10,16 @@ sequelize = new Sequelize(
     {
     host: "localhost",
     dialect: "mysql",
+    port: 3306,
 }
 );
 
 //test de la connexion
 try {
     sequelize.authenticate();
-    console.log('Connection has been established successfully.');
+    console.log('Connexion réussie !');
 } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('Erreur lors de la connexion', error);
 }
 
 //Regroupement des dépendances circulaires des fichiers 

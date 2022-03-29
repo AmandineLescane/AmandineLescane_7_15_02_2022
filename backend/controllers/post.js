@@ -1,10 +1,10 @@
-const Post = require('../models/post');
-const User = require('../models/user');
-const Comment = require('../models/comment')
+//const Post = require('../models/post');
+//const User = require('../models/user');
+const models = require('../models');
 
 //création d'un post
 exports.createPost = (req,res) => {
-    const post = new Post ({
+    const post = new models.Post ({
         user: userId,
         title: req.body.title,
         content: req.bdoy.content,
@@ -17,12 +17,12 @@ exports.createPost = (req,res) => {
 
 //suppression d'un post
 exports.deletePost = (req, res) => {
-    const userId = User.findOne({where : {id : req.params.id},})
+    const userId = models.User.findOne({where : {id : req.params.id},})
 
-    Post.findOne({where: {id : req.params.id}})
+    models.Post.findOne({where: {id : req.params.id}})
     .then(() => {
         if(id === userId || req.token.isAdmin === true){
-        Post.destroy({
+        models.Post.destroy({
             where : {id : req.params.id},
             })
             .then(() => res.status(200).json({ message: 'Post supprimé !'}))
@@ -36,9 +36,9 @@ exports.deletePost = (req, res) => {
 
 //affichage des posts
 exports.getAllPosts = (res) => {
-    Post.findAll({
-        include: [Comment, User],
+    models.Post.findAll({
+        include: [models.Comment, models.User],
     })
         .then((post)=> res.status(200).json(post))
-        .catch(error => res.status(400).json({ error }));
+        .catch((error) => res.status(400).json({ error }));
 };

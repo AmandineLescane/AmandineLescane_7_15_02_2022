@@ -26,9 +26,9 @@ try {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.User = require("../models/user")(sequelize, Sequelize.DataTypes);
-db.Post = require("../models/post")(sequelize, Sequelize.DataTypes);
-db.Comment = require("../models/comment")(sequelize, Sequelize.DataTypes);
+db.User = require("./user")(sequelize, Sequelize.DataTypes);
+db.Post = require("./post")(sequelize, Sequelize.DataTypes);
+db.Comment = require("./comment")(sequelize, Sequelize.DataTypes);
 
 db.User.associate(db);
 db.Post.associate(db);

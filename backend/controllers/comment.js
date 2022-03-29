@@ -1,10 +1,11 @@
-const User = require('../models/user');
-const Post = require('../models/post');
-const Comment = require("../models/comment");
+//const User = require('../models/user');
+//const Post = require('../models/post');
+//const Comment = require("../models/comment");
+const models = require('../models');
 
 //afficher les commentaires
 exports.getAllComments = (req, res) => {
-    Comment.findAll({
+    models.Comment.findAll({
         include:{
             Post,
             User,
@@ -17,24 +18,24 @@ exports.getAllComments = (req, res) => {
 
 //ajouter un commentaire
 exports.createComment = (req, res) => {
-    const comment = new Comment ({
+    const comment = new models.Comment ({
         user : userId,
         post: postId, 
         content : req.body.content,
     });
-    Comment.create(comment)
+    models.Comment.create(comment)
         .then(() => res.status(201).json({ message: "Commentaire ajouté ! " }))
         .catch(error => res.status(400).json({ error }));
 };
 
 //supprimer un commentaire
 exports.deleteComment = (req, res) => {
-    const userId = User.findOne({where : {id : req.params.id}});
+    const userId = models.User.findOne({where : {id : req.params.id}});
     
-    Comment.findOne({where: {id : req.params.id}})
+    models.Comment.findOne({where: {id : req.params.id}})
     .then(() => {
         if(id === userId || req.token.isAdmin === true){
-            Comment.destroy({
+            models.Comment.destroy({
                 where: {id : req.params.id},
             })
             .then(() => res.status(200).json({ message: "Commentaire supprimé !"}))

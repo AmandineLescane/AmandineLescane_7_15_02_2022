@@ -16,7 +16,7 @@ module.exports= (sequelize, DataTypes) => {
     });
     Post.associate = function(models){
         Post.belongsTo(models.User);
-        Post.hasMany(models.Comment);
+        Post.hasMany(models.Comment, { onDelete: "cascade"});
     }
     return Post;
 };

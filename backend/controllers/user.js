@@ -2,7 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const cryptojs = require('crypto-js');
 const bcrypt = require('bcrypt');
-const User = require('../models/user');
+const models = require('../models');
 
 //création de l'utilisateur
 exports.signup = (req, res) => {
@@ -10,7 +10,7 @@ exports.signup = (req, res) => {
         bcrypt
             .hash(req.body.password, 10)
             .then((hash) => {
-                const user = User.create ({
+                const user = models.User.create ({
                     nom : req.body.nom,
                     prenom : req.body.prenom,
                     email : emailCrypt,
@@ -28,7 +28,7 @@ exports.signup = (req, res) => {
 exports.login = (req, res) => {
     const emailCrypt = cryptojs.SHA256(req.body.email, process.env.SECRET_TOKEN).toString();
     
-    User.findOne({ where : { email : emailCrypt }})
+    models.User.findOne({ where : { email : emailCrypt }})
         .then((user) => {
             if(!user) {
                 return res.status(401).json({message : "Utilisateur non trouvé!"});
@@ -58,14 +58,14 @@ exports.login = (req, res) => {
 
 //afficher compte utilisateur
 exports.getOneUser = (req, res) => {
-    User.findOne({ where : { id: req.params.id }})
+    models.User.findOne({ where : { id: req.params.id }})
     .then(user => res.status(200).json(user))
     .catch(error => res.status(404).json({ error }));
 };
 
 //supprimer compte utilisateur
 exports.deleteUser = (req, res) => {
-    User.findOne({where: {id : req.params.id}})
+    models.User.findOne({where: {id : req.params.id}})
     .then(()=> {
         User.destroy({where: {id : req.params.id}})
         .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))

@@ -35,10 +35,10 @@ exports.deletePost = (req, res) => {
 }
 
 //affichage des posts
-exports.getAllPosts = (res) => {
-    models.Post.findAll({
+exports.getAllPosts = (req, res, next) => {
+    models.Post.findAll({ 
         include: [models.Comment, models.User],
     })
-        .then((post)=> res.status(200).json(post))
-        .catch((error) => res.status(400).json({ error }));
+        .then((post) => res.json({ data: post }))
+        .catch((err) => res.status(500).json({ err }));
 };

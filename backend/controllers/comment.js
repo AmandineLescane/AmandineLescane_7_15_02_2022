@@ -1,18 +1,12 @@
-//const User = require('../models/user');
-//const Post = require('../models/post');
-//const Comment = require("../models/comment");
 const models = require('../models');
 
 //afficher les commentaires
 exports.getAllComments = (req, res) => {
     models.Comment.findAll({
-        include:{
-            Post,
-            User,
-        },
+        include : [models.Post, models.User],
         where: {id: req.params.postId},
     })
-    .then((comment)=> res.status(200).json(comment))
+    .then((comment)=> res.status(200).json({data : comment}))
     .catch(error => res.status(400).json({ error }));
 }
 

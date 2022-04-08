@@ -9,11 +9,24 @@
             <router-link to="/signup"><h5>Je n'ai pas de compte</h5></router-link>
         </div>
         <form>
-            <input type="text" name="email" placeholder="Email">
-            <input type="text" name="password" placeholder="Mot de passe">
-            <input class="input_login" type="submit" value="Se connecter" v-on:click="login()">
+            <input 
+                type="text" 
+                placeholder="Email"
+                v-model="email"
+            >
+            <input 
+                type="password" 
+                placeholder="Mot de passe"
+                v-model="password"
+            >
+            <input 
+                class="input_login" 
+                type="submit" 
+                value="Se connecter" 
+                @click.prevent="login()"
+            >
+            <p id="error">{{ formErr }}</p>
         </form>
-        <p>{{ formErr }}</p>
     </div>
 
 </template>
@@ -30,10 +43,14 @@ export default {
     },
     methods: {
         login(){
-            const user = {
+            let user = {
                 email: this.email,
                 password: this.password,
-            }
+            };
+            if (this.email === "" || this.password === ""){
+                return this.formErr = "Veuillez remplir les champs vides ! "           
+            } 
+            else {            
             fetch('http://localhost:3000/api/user/login', {
                 method: 'POST',
                 body: JSON.stringify(user),
@@ -44,25 +61,25 @@ export default {
             })
             .then(res => {
                 if(res.status === 200){
-                    const content = res.json();
-                    localStorage.setItem("userLog", JSON.stringify(content));
-                    localStorage.setItem("token", JSON.stringify(content.token));
+                    localStorage.setItem("user", JSON.stringify(res.userId));
+                    localStorage.setItem("token", JSON.stringify(res.token));
                     this.$router.push('/feed');
+                }
+                else{
+                    return this.formErr = "Utilisateur inexistant"
                 }
             })
             .catch(()=> {
                 localStorage.clear();
-                return this.formErr = "L'adresse email et/ou le mot de passe renseigné ne correspondent pas";
+                return this.formErr = "L'adresse email et/ou le mot de passe renseignés sont incorrects";
             })
+            }
         }
     }
 }
 </script>
 
 <style lang="scss" scoped> 
-*{
-    font-family:'quicksand';
-}
 .auth_block{
     background : #ffebeb;
     border-radius : 50px;
@@ -126,5 +143,9 @@ form{
 }
 a{
     color: #ed4033;;
+}
+#error{
+    font-weight: 700;
+    color : #ed4033;
 }
 </style>

@@ -9,13 +9,34 @@
             <router-link to="/login"><h5>J'ai déjà un compte</h5></router-link>
         </div>
         <form>
-            <input type="text" name="prenom" placeholder="Prénom" v-model="prenom">
-            <input type="text" name="nom" placeholder="Nom" v-model="nom">
-            <input type="text" name="email" placeholder="Email" v-model="email">
-            <input type="text" name="password" placeholder="Mot de passe" v-model="password">
-            <input class="input_signin" type="submit" value="S'inscrire" v-on:click="submit()">
+            <input 
+                type="text" 
+                placeholder="Prénom" 
+                v-model="name"
+            >
+            <input 
+                type="text" 
+                placeholder="Nom" 
+                v-model="lastName"
+            >
+            <input 
+                type="text" 
+                placeholder="Email" 
+                v-model="email"
+            >
+            <input 
+                type="password" 
+                placeholder="Mot de passe" 
+                v-model="password"
+            >
+            <input 
+                class="input_signin" 
+                type="submit" 
+                value="S'inscrire" 
+                @click.prevent="submit()"
+            >
+            <p id="error">{{ formErr }}</p>
         </form>
-        <p>{{ formErr }}</p>
     </div>
 
 </template>
@@ -25,8 +46,8 @@ export default {
     name : "signup",
     data(){
         return {
-            prenom: "",
-            nom: "", 
+            name: "",
+            lastName: "", 
             email: "",
             password: "",
             formErr: null,
@@ -35,8 +56,8 @@ export default {
     methods: {
         submit(){
             let newUser = {
-                name : this.nom,
-                lastname: this.prenom,
+                name : this.name,
+                lastName: this.lastName,
                 email: this.email, 
                 password: this.password,
             };
@@ -44,17 +65,11 @@ export default {
                 email: this.email, 
                 password: this.password,
             };
-
-            const regExpEmail = ('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
-            const regExpPassword = ("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-
-            if(regExpEmail.test(email.value) === false || email.value == ""){
-                return this.formErr = "Veuillez rentrer une adresse mail valide";
-            }
-            else if (regExpPassword.test(password.value) === false || password.value == ""){
-                return this.formErr = "Veuillez rentrer un mot de passe valide (au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial";
-            } else {
-            fetch('http://localhost:3000/api/user', {
+            if (this.name === "" || this.lastName === "" || this.email === "" || this.password === ""){
+                return this.formErr = "Veuillez remplir les champs vides ! "            
+            } 
+            else {
+            fetch('http://localhost:3000/api/user/signup', {
                         method: 'POST',
                         body: JSON.stringify(newUser),
                         headers: {
@@ -64,7 +79,7 @@ export default {
                     })
             .then(res => {
                 if(res.status === 201){
-                    fetch('http://localhost:3000/api/user/login', {
+                    fetch('http://localhost:3000/api/user/login', login,{
                         method: 'POST',
                         body: JSON.stringify(login),
                         headers: {
@@ -74,20 +89,19 @@ export default {
                     })
                     .then(res => {
                         if(res.status === 200){
-                            const content = res.json();
-                            localStorage.setItem("userLog", JSON.stringify(content));
-                            localStorage.setItem("token", JSON.stringify(content.token));
+                            localStorage.setItem("user", JSON.stringify(res));
+                            localStorage.setItem("token", JSON.stringify(res.token));
                             this.$router.push('/feed');
                         }
                     })
                     .catch(()=> {
                         localStorage.clear();
-                        alert ("L'adresse email et le mot de passe renseignés ne sont pas valides")
+                        return this.formErr ="L'adresse email et le mot de passe renseignés ne sont pas valides";
                     })
                 }
             })
             .catch(()=> {
-                alert ("L'adresse email est déjà utilisé")
+                return this.formErr = "L'adresse email est déjà utilisé";
             })
             }
         }
@@ -96,9 +110,6 @@ export default {
 </script>
 
 <style lang="scss" scoped> 
-*{
-    font-family : 'Quicksand';
-}
 .auth_block{
     background : #ffebeb;
     border-radius : 50px;
@@ -165,7 +176,8 @@ form{
 a{
     color: #ed4033;;
 }
-.fa-solid{
-    color: #ed4033
+#error{
+    font-weight: 700;
+    color : #ed4033;
 }
 </style>

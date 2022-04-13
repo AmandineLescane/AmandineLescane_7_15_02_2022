@@ -3,18 +3,30 @@
 		<a href="/feed"><h3 class="nav_title">Groupomania</h3></a>
 		<ul class="nav_list">
 			<router-link to="/user"><li class="nav_item">Compte</li></router-link>
-			<router-link to="/login"><li class="nav_item">Déconnexion</li></router-link>
+			<router-link 
+			to="/login"
+			@click="logout()">
+				<li class="nav_item">Déconnexion</li>
+			</router-link>
 		</ul>
 	</nav>
 </template>
 
 <script>
-
+export default {
+	name : "navBar",
+	methods :{
+		logout(){
+			localStorage.clear();
+		}
+	}
+};
 </script>
 
 <style lang="scss" scoped>
+@import "../style.scss";
 .nav {
-	background: #ed4033;
+	background: $font-color;
 	color: white;
 	display: flex;
 	justify-content: space-between;

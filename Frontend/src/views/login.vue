@@ -60,14 +60,16 @@ export default {
                 mode: 'cors',
             })
             .then(res => {
-                if(res.status === 200){
-                    localStorage.setItem("user", JSON.stringify(res.userId));
-                    localStorage.setItem("token", JSON.stringify(res.token));
+                res.json()
+                .then(data => {
+                    let token = data.token;
+                    let userId = data.userId;
+                    let admin = data.admin;
+                    localStorage.setItem("token", JSON.stringify(token));
+                    localStorage.setItem("user", JSON.stringify(userId));
+                    localStorage.setItem("admin", JSON.stringify(admin));
                     this.$router.push('/feed');
-                }
-                else{
-                    return this.formErr = "Utilisateur inexistant"
-                }
+                })
             })
             .catch(()=> {
                 localStorage.clear();
@@ -80,17 +82,18 @@ export default {
 </script>
 
 <style lang="scss" scoped> 
+@import "../style.scss";
 .auth_block{
-    background : #ffebeb;
+    background : $background-color;
     border-radius : 50px;
     padding-top : 10px;
     padding-bottom: 10px;
-    border: solid 2px #f9d7d6;
-    margin: 15px;
+    border: solid 2px $border-color;
+    margin: 25px;
 }
 .auth_title{
     display : flex;
-    color: #ed4033;
+    color: $font-color;
     flex-direction : column;
     align-items : center; 
 }
@@ -122,7 +125,7 @@ form{
     align-items : center;
     margin-bottom: 20px;
     input{
-        border: solid 3px #f9d7d6;
+        border: solid 3px $border-color;
         border-radius : 10px;
         margin-top: 5px;
         margin-bottom: 5px;
@@ -131,21 +134,13 @@ form{
     }
 }
 .input_login{
-    width: 50%;
-    background-color : #f9d7d6;
-    color: black;
-    font-weight: bold;
-    transition: cubic-bezier(.03,.36,.63,1.17) .3s;
-    &:hover{
-        transform: scale(1.1);
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    }
+    @include auth-button;
 }
 a{
-    color: #ed4033;;
+    color: $font-color;;
 }
 #error{
     font-weight: 700;
-    color : #ed4033;
+    color : $font-color;
 }
 </style>

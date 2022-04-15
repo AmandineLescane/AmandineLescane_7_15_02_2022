@@ -19,9 +19,9 @@ exports.signup = (req, res) => {
                 user
                     .save()
                     .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
-                    .catch((error) => res.status(401).json({ error }));
+                    .catch(error => res.status(400).json({ error }));
             })
-            .catch((error) => res.status(500).json({ error }));
+            .catch(error => res.status(500).json({ error }));
 }
 
 //connexion de l'utilisateur
@@ -41,9 +41,10 @@ exports.login = (req, res) => {
                     }
                     else {
                     res.status(200).json({
-                        user_id : user._id,
+                        userId : user.id,
+                        admin : user.isAdmin,
                         token: jwt.sign(
-                            { userId: user._id },
+                            { userId: user.id },
                             process.env.SECRET_TOKEN,
                             { expiresIn: '24h' }
                             )

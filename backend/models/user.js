@@ -1,6 +1,13 @@
 
 module.exports = ( sequelize, DataTypes ) => {
     const User = sequelize.define("User", {
+        id:{
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+            generated: true,
+            allowNull : false,
+        },
         name : {
             type: DataTypes.STRING,
             allowNull : false,
@@ -21,7 +28,7 @@ module.exports = ( sequelize, DataTypes ) => {
         isAdmin : {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            default: false,
+            defaultValue: false,
         }
     });
     User.associate = function(models){

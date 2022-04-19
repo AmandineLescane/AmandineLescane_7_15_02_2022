@@ -92,7 +92,7 @@ export default {
                             let token = data.token;
                             let userId = data.userId;
                             let admin = data.admin;
-                            localStorage.setItem("token", JSON.stringify(token));
+                            localStorage.setItem("token", token);
                             localStorage.setItem("userId", JSON.stringify(userId));
                             localStorage.setItem("admin", JSON.stringify(admin));
                             this.$router.push('/feed');

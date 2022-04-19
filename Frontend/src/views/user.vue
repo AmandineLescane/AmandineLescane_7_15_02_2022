@@ -5,70 +5,94 @@
     </div>
     <div class="user_block">
         <div class="user_title">
-            <h1>Mon compte </h1>
+            <h1>Mon compte</h1>
         </div>
         <div class="user_name">
-            <h4>Prénom : {{userLog.name}}</h4>
+            <h4>Prénom : {{user.name}}</h4>
         </div>
         <div class="user_lastname">
-            <h4>Nom : {{userLog.lastName}}</h4>
+            <h4>Nom : {{user.lastName}}</h4>
         </div>
         <div class="user_email">
-            <h4>Adresse mail : {{userLog.email}}</h4>
+            <h4>Adresse mail : {{user.email}}</h4>
         </div>
         <div>
-            <input class="user_deactivate" type="button" value="Désactiver compte" v-if="id === userLog.id || userLog.isAdmin === true" @click="deleteAccount()">
+            <input 
+            class="user_deactivate" 
+            type="button" 
+            value="Désactiver compte" 
+            @click.prevent="deleteAccount()"
+            >
         </div>
     </div>
 </template>
 
 <script>
-import navBar from '../components/navBar.vue'
+import navBar from '../components/navBar.vue';
 
 export default {
     name: "user",
     components:{
         navBar, 
     },
+    beforeCreate(){
+        fetch(`http://localhost:3000/api/user/${localStorage.getItem("userId")}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            this.user = data
+        })      
+        .catch((err) => console.log(err))
+    },
     data(){
         return{
-            userLog : "",
+            user: {},
+            admin: localStorage.getItem("admin"),
+            userId: localStorage.getItem("userId"),
         }
-    }
-    deleteAccount(){
-        let params = new URLSearchParams(window.location.search);
-        let userId = params.get("id");
-
-        fetch(`http://localhost:3000/api/user/${userId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            Authorization : `Bearer ${localStorage.getItem("token")}`,
-        })
-        .then((res) => console.log(res)
-        .catch((err) => console.log(err));
-        localStorage.clear();
-        this.$router.push("/login");
-    }
-    }
+    },
+    methods : {
+        deleteAccount(){
+            fetch(`http://localhost:3000/api/user/${localStorage.getItem("userId")}`, {
+                method: "DELETE",
+                headers:{
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+            })
+            .then((res) => {
+                if (res.status === 200){
+                    alert("Votre compte a bien été supprimé, à bientôt 👋🏼");
+                    localStorage.clear();
+                    this.$router.push("/login");
+                }else{
+                    alert("Erreur lors de la suppression de votre compte 😰");
+                    console.log(res.json());
+                }
+            })
+            .catch((err) => console.log(err))
+        },
+    },
+}
 </script>
 
 <style lang="scss" scoped>
-*{
-    font-family : 'Quicksand';
-}
+@import "../style.scss";
 .user_block{
-    background : #ffebeb;
+    background : $background-color;
     border-radius : 50px;
     padding : 15px;
     display: flex; 
     flex-direction : column;
     align-items : center;
-    border: solid 2px #f9d7d6;
-    margin: 15px;
+    border: solid 2px $border-color;
+    margin: 25px;
     h1{
-        color: #ed4033;
+        color: $font-color;
     }
 }
 .div_img{
@@ -82,18 +106,11 @@ export default {
     }
 }
 .user_deactivate{
+    @include auth-button;
+    width: auto;
     margin-top :15px;
-    border: solid 3px #ed4033;
-    border-radius : 10px;
-    background-color : #ed4033;
-    color: black;
+    border-color: $font-color;
+    background-color : $font-color;
     font-size: 18px;
-    font-weight: bold;
-    transition: cubic-bezier(.2, 3, .4, 1) .4s;
-    &:hover{
-        transform: scale(1.1);
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    }
 }
-
 </style>

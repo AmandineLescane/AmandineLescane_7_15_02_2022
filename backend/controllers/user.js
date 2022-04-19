@@ -1,19 +1,19 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const cryptojs = require('crypto-js');
+// const cryptojs = require('crypto-js');
 const bcrypt = require('bcrypt');
 const models = require('../models');
 
 //création de l'utilisateur
 exports.signup = (req, res) => {
-        const emailCrypt = cryptojs.SHA256(req.body.email, process.env.SECRET_TOKEN).toString();
+        // const emailCrypt = cryptojs.SHA256(req.body.email, process.env.SECRET_TOKEN).toString();
         bcrypt
             .hash(req.body.password, 10)
             .then((hash) => {
                 const user = models.User.create ({
                     name : req.body.name,
                     lastName : req.body.lastName,
-                    email : emailCrypt,
+                    email : req.body.email,
                     password : hash,
                 });
                 user
@@ -25,9 +25,9 @@ exports.signup = (req, res) => {
 
 //connexion de l'utilisateur
 exports.login = (req, res) => {
-    const emailCrypt = cryptojs.SHA256(req.body.email, process.env.SECRET_TOKEN).toString();
+    // const emailCrypt = cryptojs.SHA256(req.body.email, process.env.SECRET_TOKEN).toString();
     
-    models.User.findOne({ where : { email : emailCrypt }})
+    models.User.findOne({ where : { email : req.body.email }})
         .then((user) => {
             if(!user) {
                 return res.status(401).json({message : "Utilisateur non trouvé!"});
@@ -65,11 +65,7 @@ exports.getOneUser = (req, res) => {
 
 //supprimer compte utilisateur
 exports.deleteUser = (req, res) => {
-    models.User.findOne({where: {id : req.params.id}})
-    .then(()=> {
-        User.destroy({where: {id : req.params.id}})
+    models.User.destroy({where: {id : req.params.id}})
         .then(() => res.status(200).json({ message: "Compte utilisateur supprimé" }))
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch (error => res.status(500).json({ error }));
+        .catch(error => res.status(400).json({ error }))
 }

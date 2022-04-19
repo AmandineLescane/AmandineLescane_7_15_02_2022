@@ -2,7 +2,7 @@
     <nav class="nav">
 		<a href="/feed"><h3 class="nav_title">Groupomania</h3></a>
 		<ul class="nav_list">
-			<router-link to="/user"><li class="nav_item">Compte</li></router-link>
+			<router-link to="/user/:id"><li class="nav_item">Compte</li></router-link>
 			<router-link 
 			to="/login"
 			@click="logout()">

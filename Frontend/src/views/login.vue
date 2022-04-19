@@ -65,15 +65,19 @@ export default {
                     let token = data.token;
                     let userId = data.userId;
                     let admin = data.admin;
-                    localStorage.setItem("token", JSON.stringify(token));
+                    localStorage.setItem("token", token);
                     localStorage.setItem("userId", JSON.stringify(userId));
                     localStorage.setItem("admin", JSON.stringify(admin));
-                    this.$router.push('/feed');
                 })
+                if(res.status === 200){
+                    this.$router.push('/feed');
+                } else {
+                    return this.formErr = "L'adresse email et/ou le mot de passe renseignés sont incorrects";
+                }
             })
             .catch(()=> {
                 localStorage.clear();
-                return this.formErr = "L'adresse email et/ou le mot de passe renseignés sont incorrects";
+                return this.formErr = "Erreur lors de la connexion";
             })
             }
         }

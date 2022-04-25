@@ -1,35 +1,43 @@
-//const Post = require('../models/post');
-//const User = require('../models/user');
+require('dotenv').config();
 const models = require('../models');
+const jwt = require('jsonwebtoken');
 
 //création d'un post
 exports.createPost = (req,res) => {
-    const post = new models.Post ({
-        user: userId,
-        title: req.body.title,
-        content: req.bdoy.content,
-        image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    });
-    post.save()
-        .then(() => res.status(201).json({ message: 'Post publié !'}))
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, `${process.env.SECRET_TOKEN}`);
+    const userId = decodedToken.userId;
+
+    if(!req.file){
+        models.Post.create ({
+            UserId : userId,
+            post_content: req.body.post_content,
+            like: 0,
+        })
+        .then((newPost) => res.status(201).json({newPost, message: "Post publié !"}))
         .catch(error => res.status(400).json({ error }));
+    } else if (req.file){
+        models.Post.create ({
+            user : userId,
+            post_content: req.body.post_content,
+            image : `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename}`,
+            like: 0,
+        })
+        .then((newPost) => res.status(201).json({newPost, message: "Post publié !"}))
+        .catch(error => res.status(400).json({ error }));
+    }
 }
 
 //suppression d'un post
 exports.deletePost = (req, res) => {
-    const userId = models.User.findOne({where : {id : req.params.id},})
-
     models.Post.findOne({where: {id : req.params.id}})
     .then(() => {
-        if(id === userId || req.token.isAdmin === true){
         models.Post.destroy({
             where : {id : req.params.id},
             })
             .then(() => res.status(200).json({ message: 'Post supprimé !'}))
             .catch(error => res.status(400).json({ error }));
-        } else {
-            res.status(401).json({ error });
-        }
     })
     .catch(error => res.status(400).json({ error }));
 }
@@ -37,8 +45,10 @@ exports.deletePost = (req, res) => {
 //affichage des posts
 exports.getAllPosts = (req, res, next) => {
     models.Post.findAll({ 
-        include: [models.Comment, models.User],
+        include: 
+        [models.Comment, models.User],
+        order: [['createdAt', 'DESC']],
     })
-        .then((post) => res.json({ data: post }))
+        .then((posts) => res.json({ data: posts }))
         .catch((err) => res.status(500).json({ err }));
 };

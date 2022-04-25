@@ -3,16 +3,15 @@
     v-for="post in posts"
     :key="post.id">
         <div class="post_user">
-            <h3>{{user.name}} {{user.lastName}}</h3>
+            <h3>{{post.User.name}} {{post.User.lastName}}</h3>
         </div>
         <div class="post_content">
-            <h4 class="post_title">{{message.title}}</h4>
-            <p class="post_text">{{message.post_content}}</p>
+            <p class="post_text">{{post.post_content}}</p>
             <p class="post_img">
                 <img 
                     src=""  
                     alt=""
-                    v-if="message.imageUrl != null"
+                    v-if="post.imageUrl != null"
                 />
             </p>
         </div>
@@ -21,9 +20,13 @@
                 <button class="post_button" @click="likePost()">
                     <i class="fa fa-heart"></i>
                 </button>
-                <p class= "likeNbr">{{message.likeNbr}}</p>
+                <p class= "likeNbr">{{post.like}}</p>
             </span>
-            <button class="post_button" @click="deletePost()">
+            <button 
+                class="post_button" 
+                v-if="post.UserId == userId || admin == true"
+                @click.prevent="deletePost(post)"
+            >
                 <i class="fa fa-trash"></i>
             </button>
         </div>
@@ -33,18 +36,25 @@
                     class="comment_create" 
                     placeholder="Votre commentaire..."
                     v-model="comment_create"
-                    @keyup.enter="createComment()"
+                    @keyup.enter.prevent="createComment(post)"
                 />
             </div>
             <div class="comment_list"
                 v-for="comment in comments"
                 :key="comment.id"
             >
-                <span class="comment">
-                <h5 class="comment_user">{{user.name}} {{user.lastName}}</h5>
+                <span 
+                class="comment"
+                v-if="post.id === comment.PostId"
+                >
+                <h4 class="comment_user">{{comment.User.name}} {{comment.User.lastName}}</h4>
                 <p class="comment_text">{{comment.comment_content}}</p>
                 </span>
-                <button class="post_button" @click="deleteComment()">
+                <button 
+                    class="post_button" 
+                    v-if="comment.UserId == userId || admin === true"
+                    @click="deleteComment()"
+                >
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -57,69 +67,103 @@ export default {
     name : "post",
     data (){
         return {
-            posts : [],
-            comments : [],
-            comment_create : "",
+            posts: [],
+            Comments: [],
+            User : {},
+            userId : localStorage.getItem("userId"),
+            admin : localStorage.getItem("admin"),
+            comment_content: "",
         }
     },
-    // methods : {
-    //     getPosts(){
-    //         fetch('http://localhost:3000/api/post/', {
-    //             method : "GET",
-    //             Authorization : `Bearer ${localStorage.getItem("token")}`,
-    //         })
-    //         .then((res)=> {
-    //             this.posts = res.data;
-    //         })
-    //         .catch((err)=> {
-    //             console.log("erreur lors du chargement des posts")
-    //         })
-    //     },
-    //     createComment(){
-    //         let newComment = {
-    //             comment_content : this.comment_content,
-    //         }; 
-    //         fetch('http://localhost:3000/api/comment/', newComment, {
-    //             method : "POST",
-    //             Authorization : `Bearer ${localStorage.getItem("token")}`,
-    //         })
-    //         .then((res)=> {
-    //             console.log(res);
-    //         })
-    //         .catch((err)=> {
-    //             console.log(err);
-    //         })
-    //     },
-    //     deletePost(){
-    //         fetch('http://localhost:3000/api/post/:id', {
-    //             method : "DELETE",
-    //             Authorization : `Bearer ${localStorage.getItem("token")}`,
-    //         })
-    //         .then((res)=> {
-    //             console.log(res);
-    //             window.location.reload();
-    //         })
-    //         .catch((err)=> {
-    //             console.log(err);
-    //         })
-    //     },
-    //     deleteComment(){
-    //         fetch('http://localhost:3000/api/comment/:id', {
-    //             method : "DELETE",
-    //             Authorization : `Bearer ${localStorage.getItem("token")}`,
-    //         })
-    //         .then((res)=> {
-    //             console.log(res);
-    //             window.location.reload();
-    //         })
-    //         .catch((err)=> {
-    //             console.log(err);
-    //         })
-    //     },
-    // mounted(){
-    //     this.getPosts();
-    // },
-    // }
+    props : {
+        admin : Boolean,
+    },
+    created(){
+            fetch('http://localhost:3000/api/post/', {
+                method : "GET",
+                Authorization : `Bearer ${localStorage.getItem("token")}`,
+            })
+            .then((res)=> res.json())
+            .then(data => {
+                this.posts = data.data
+            })
+            .catch((err) => console.log(err))
+
+            fetch('http://localhost:3000/api/comment/', {
+                method : "GET",
+                Authorization : `Bearer ${localStorage.getItem("token")}`,
+            })
+            .then((res)=> res.json())
+            .then(data => {
+                this.comments = data.data
+            })
+            .catch((err) => console.log(err))
+        },
+    methods : {
+        createComment(post){
+            let newComment = {
+                UserId : localStorage.getItem("userId"),
+                PostId: post.id,
+                comment_content : this.comment_content,
+            }; 
+            fetch('http://localhost:3000/api/comment/', {
+                method : "POST",
+                    body: JSON.stringify(newComment),
+                    headers:{
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+            })
+            .then((res)=> {
+                res.json()
+                .then(data => {
+                    console.log(data);
+                    if(res.status === 201){
+                        document.location.reload();
+                        this.$router.push("/feed");
+                    } else {
+                        alert("Erreur lors de la publication de votre commentaire");
+                        }
+                    })
+            })
+            .catch((err)=> {
+                console.log(err);
+            })
+        },
+        deletePost(post){
+            if(confirm("Voulez vous supprimer ce post ? ")){
+            fetch(`http://localhost:3000/api/post/${post.id}`, {
+                method: "DELETE",
+                headers:{
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+            })
+            .then((res) => {
+                if (res.status === 200){
+                    document.location.reload();
+                    this.$router.push("/feed");
+                }else{
+                    console.log(res.json());
+                }
+            })
+            .catch((err) => console.log(err))
+            }
+        },
+        // deleteComment(){
+        //     fetch('http://localhost:3000/api/comment/:id', {
+        //         method : "DELETE",
+        //         Authorization : `Bearer ${localStorage.getItem("token")}`,
+        //     })
+        //     .then((res)=> {
+        //         console.log(res);
+        //         window.location.reload();
+        //     })
+        //     .catch((err)=> {
+        //         console.log(err);
+        //     })
+        // },
+    }
 }
 </script>
 
@@ -202,7 +246,7 @@ export default {
         display: flex;
         justify-content: space-between;
         width: 100%;
-        margin-top: 4px;
+        margin: 5px;
         padding: 3px 0px 10px 0px;
         background-color: white;
         border-bottom: $border-color solid 1px;

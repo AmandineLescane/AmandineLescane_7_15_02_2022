@@ -68,7 +68,7 @@ export default {
                 alert("Le contenu du post est vide, veuillez écrire quelque chose !");
             }
             else { 
-                fetch('http://localhost:3000/api/post', {
+                fetch('http://localhost:3000/api/post/', {
                     method : "POST",
                     body: JSON.stringify(newPost),
                     headers:{

@@ -35,7 +35,7 @@
                 <input
                     class="comment_create" 
                     placeholder="Votre commentaire..."
-                    v-model="comment_create"
+                    v-model="comment_content"
                     @keyup.enter.prevent="createComment(post)"
                 />
             </div>
@@ -43,40 +43,39 @@
                 v-for="comment in comments"
                 :key="comment.id"
             >
-                <span 
-                class="comment"
-                v-if="post.id === comment.PostId"
+                <div class="comment"
+                    v-if="post.id == comment.PostId"
                 >
-                <h4 class="comment_user">{{comment.User.name}} {{comment.User.lastName}}</h4>
-                <p class="comment_text">{{comment.comment_content}}</p>
-                </span>
-                <button 
-                    class="post_button" 
-                    v-if="comment.UserId == userId || admin === true"
-                    @click="deleteComment()"
-                >
+                    <span>
+                        <h4 class="comment_user">{{comment.User.name}} {{comment.User.lastName}}</h4>
+                        <p class="comment_text">{{comment.comment_content}}</p>
+                    </span>
+                    <button 
+                        class="post_button" 
+                        v-if="comment.UserId == userId || admin === true"
+                        @click="deleteComment(comment)"
+                    >
                     <i class="fas fa-times"></i>
-                </button>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
 export default {
     name : "post",
     data (){
         return {
             posts: [],
-            Comments: [],
+            comments: [],
             User : {},
             userId : localStorage.getItem("userId"),
             admin : localStorage.getItem("admin"),
             comment_content: "",
         }
-    },
-    props : {
-        admin : Boolean,
     },
     created(){
             fetch('http://localhost:3000/api/post/', {
@@ -103,7 +102,7 @@ export default {
         createComment(post){
             let newComment = {
                 UserId : localStorage.getItem("userId"),
-                PostId: post.id,
+                PostId : post.id,
                 comment_content : this.comment_content,
             }; 
             fetch('http://localhost:3000/api/comment/', {
@@ -150,19 +149,24 @@ export default {
             .catch((err) => console.log(err))
             }
         },
-        // deleteComment(){
-        //     fetch('http://localhost:3000/api/comment/:id', {
-        //         method : "DELETE",
-        //         Authorization : `Bearer ${localStorage.getItem("token")}`,
-        //     })
-        //     .then((res)=> {
-        //         console.log(res);
-        //         window.location.reload();
-        //     })
-        //     .catch((err)=> {
-        //         console.log(err);
-        //     })
-        // },
+        deleteComment(comment){
+            fetch(`http://localhost:3000/api/comment/${comment.id}`, {
+                method: "DELETE",
+                headers:{
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+            })
+            .then((res) => {
+                if (res.status === 200){
+                    document.location.reload();
+                    this.$router.push("/feed");
+                }else{
+                    console.log(res.json());
+                }
+            })
+            .catch((err) => console.log(err))
+        },
     }
 }
 </script>
@@ -242,7 +246,10 @@ export default {
         border-radius : 10px;
         background-color: $background-color;
     }
-    .comment_list{
+    p{
+        font-size: 15px;
+    }
+    .comment{
         display: flex;
         justify-content: space-between;
         width: 100%;
@@ -250,12 +257,6 @@ export default {
         padding: 3px 0px 10px 0px;
         background-color: white;
         border-bottom: $border-color solid 1px;
-    }
-    p{
-        font-size: 15px;
-    }
-    .comment{
-        background-color: white;
     }
 }
 .comment_user, .comment_text{

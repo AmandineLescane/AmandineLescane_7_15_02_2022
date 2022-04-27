@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require ('fs')
 const models = require('../models');
 const jwt = require('jsonwebtoken');
 
@@ -18,16 +19,16 @@ exports.createPost = (req,res) => {
         .catch(error => res.status(400).json({ error }));
     } else if (req.file){
         models.Post.create ({
-            user : userId,
+            UserId : userId,
             post_content: req.body.post_content,
-            image : `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename}`,
+            image : `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
             like: 0,
         })
         .then((newPost) => res.status(201).json({newPost, message: "Post publié !"}))
         .catch(error => res.status(400).json({ error }));
     }
 }
+
 
 //suppression d'un post
 exports.deletePost = (req, res) => {

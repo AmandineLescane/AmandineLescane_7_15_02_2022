@@ -7,30 +7,28 @@
     </div>
     <div class="feed_content">
         <h2>Quoi de neuf ?</h2>
-        <div class="feed_createpost">
+        <form class="feed_createpost">
             <textarea 
                 class="feed_typetext" 
-                name="textarea" 
+                name="post_content"
                 placeholder="Partagez avec la communauté"
-                v-model="post_content">
-            </textarea>
-            <div class="feed_buttons">
-                <input 
-                    class="add_img" 
-                    type="file" 
-                    ref="image"
-                    name="image"
-                    accept="image/png, image/jpeg"
-                    @change="add_img(image)"
-                >
-                <input 
-                class="input_createpost" 
+                v-model="post_content"
+            />
+        <div class="feed_buttons">
+            <input 
+                type="file" 
+                ref="file"
+                accept="image/png, image/jpeg"
+                @change="add_img()"
+            >
+            <input
                 type="submit" 
+                class="input_createpost" 
                 value="Publier"
                 @click.prevent="createPost()"
                 />
             </div>
-        </div>
+        </form>
         <div class="feed_posts">
             <Post/>
         </div>
@@ -54,15 +52,11 @@ export default {
         }
     },
     methods : {
-        // add_img(){
-            
-        // },
         createPost(){
-            let newPost = {
-                post_content : this.post_content,
-                image : this.image,
-                UserId : localStorage.getItem("userId"),
-            }
+            let newPost = new FormData();
+            newPost.append("post_content", this.post_content);
+            newPost.append("image", this.file);
+            newPost.append("userId", localStorage.getItem("userId"));
 
             if (this.post_content === ""){
                 alert("Le contenu du post est vide, veuillez écrire quelque chose !");
@@ -70,9 +64,8 @@ export default {
             else { 
                 fetch('http://localhost:3000/api/post/', {
                     method : "POST",
-                    body: JSON.stringify(newPost),
+                    body: newPost,
                     headers:{
-                    'Content-type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 })
@@ -90,6 +83,10 @@ export default {
                 .catch(error => console.log(error))
                 }))
             }
+        },
+        add_img(){
+            console.log (this.$refs.file.files[0])
+            this.file = this.$refs.file.files[0];
         },
     }
 }

@@ -9,9 +9,9 @@
             <p class="post_text">{{post.post_content}}</p>
             <p class="post_img">
                 <img 
-                    src=""  
+                    :src="post.image"  
                     alt=""
-                    v-if="post.imageUrl != null"
+                    v-if="post.image != null"
                 />
             </p>
         </div>
@@ -198,7 +198,7 @@ export default {
     img {
     object-fit: contain;
     width: 100%;
-    max-height: 40%;
+    max-height: 500px;
     }
 }
 .post_icon {

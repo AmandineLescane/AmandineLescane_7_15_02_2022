@@ -90,7 +90,8 @@ export default {
     flex-direction : column;
     align-items : center;
     border: solid 2px $border-color;
-    margin: 25px;
+    max-width : 70%;
+    margin: auto;
     h1{
         color: $font-color;
     }

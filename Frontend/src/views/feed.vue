@@ -117,7 +117,8 @@ export default {
     border: solid 2px $border-color;
     border-radius : 40px;
     padding : 10px;
-    margin: 25px;
+    max-width : 70%;
+    margin: auto;
     .feed_createpost{
         display:flex;
         align-items: center;
@@ -140,6 +141,11 @@ export default {
     }
     .input_createpost{
         @include feed_button;
+    }
+}
+@media screen and (max-width : 700px) {
+    .feed_posts{
+        width : 90%;
     }
 }
 </style>

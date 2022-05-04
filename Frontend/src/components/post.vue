@@ -17,14 +17,14 @@
         </div>
         <div class="post_icon">
             <span class="post_like">
-                <button class="post_button" @click="likePost()">
+                <button class="post_button" @click="likePost(post)">
                     <i class="fa fa-heart"></i>
                 </button>
                 <p class= "likeNbr">{{post.like}}</p>
             </span>
             <button 
                 class="post_button" 
-                v-if="post.UserId == userId || admin == true"
+                v-if="post.UserId == userId || admin == 'true'"
                 @click.prevent="deletePost(post)"
             >
                 <i class="fa fa-trash"></i>
@@ -52,7 +52,7 @@
                     </span>
                     <button 
                         class="post_button" 
-                        v-if="comment.UserId == userId || admin === true"
+                        v-if="comment.UserId == userId || admin == 'true'"
                         @click="deleteComment(comment)"
                     >
                     <i class="fas fa-times"></i>
@@ -97,7 +97,7 @@ export default {
                 this.comments = data.data
             })
             .catch((err) => console.log(err))
-        },
+    },
     methods : {
         createComment(post){
             let newComment = {
@@ -166,6 +166,36 @@ export default {
                 }
             })
             .catch((err) => console.log(err))
+        },
+        likePost(post){
+            let like = {
+                UserId : localStorage.getItem("userId"),
+                PostId : post.id,
+            }
+            fetch("http://localhost:3000/api/like", {
+                method : "POST",
+                    body: JSON.stringify(like),
+                    headers:{
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+            })
+            .then((res)=> {
+                res.json()
+                .then(data => {
+                    console.log(data);
+                    if(res.status === 201){
+                        document.location.reload();
+                        this.$router.push("/feed");
+                    } else {
+                        console.log("Erreur");
+                        }
+                    })
+            })
+            .catch((err)=> {
+                console.log(err);
+            })
+        
         },
     }
 }

@@ -123,26 +123,38 @@ export default {
     padding-top : 10px;
     padding-bottom: 10px;
     border: solid 2px $border-color;
-    margin: 25px;
+    max-width : 70%;
+    margin: auto;
+    .auth_title{
+        display : flex;
+        color: $font-color;
+        flex-direction : column;
+        align-items : center; 
+    }
+    h2{
+        margin-top: 15px;
+    }
+    h3{
+        margin-bottom: 10px;
+        margin-top: 10px;
+        font-weight: 400;
+    }
+    h5{
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+    .input_signin{
+        @include auth-button;
+    }
+    a{
+        color: $font-color;;
+    }
+    #error{
+        font-weight: 700;
+        color : $font-color;
+    }
 }
-.auth_title{
-    display : flex;
-    color: $font-color;
-    flex-direction : column;
-    align-items : center; 
-}
-h2{
-    margin-top: 15px;
-}
-h3{
-    margin-bottom: 10px;
-    margin-top: 10px;
-    font-weight: 400;
-}
-h5{
-    margin-bottom: 5px;
-    margin-top: 10px;
-}
+
 .div_img{
     display: flex;
     flex-direction : row;
@@ -167,14 +179,11 @@ form{
         height: 30px;
     }
 }
-.input_signin{
-    @include auth-button;
-}
-a{
-    color: $font-color;;
-}
-#error{
-    font-weight: 700;
-    color : $font-color;
+@media screen and (max-width : 387px){
+    .auth_title{
+        h3{
+            text-align: center;
+        }
+    }
 }
 </style>

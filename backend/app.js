@@ -23,13 +23,10 @@ app.use((req, res, next) => {
 });
 
 //routes
-app.get("/hi/", (req, res) => {
-    res.json({ message: "Welcome to my application."});
-});
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
-app.use('/api/post', likeRoutes);
 app.use('/api/comment', commentRoutes);
+app.use('/api/like', likeRoutes);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 

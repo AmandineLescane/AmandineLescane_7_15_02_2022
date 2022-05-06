@@ -1,29 +1,37 @@
-const User = require('./user');
-const Post = require('./post');
+require('dotenv').config();
+const models = require('../models');
+const jwt = require('jsonwebtoken');
 
-//ajouter un like et enlever un like 
-exports.like = (req, res) => {
-    const postId = Post.findOne({where: {id : req.params.id},});
-    const userId = User.findOne({where: {id: req.params.id}});
-    const userLiked = Post.findOne({where : {userId, postId}});
-    
-    if(req.body.like === 1){
-        Post.increment({
-            like : -1,
-        },
-        { where: {
-            userLiked
-        }})
-        .then(() => res.status(200).json({ message: 'Like supprimé !'}))
-        .catch(error => res.status(400).json({ error }));
-    } else {
-        Post.increment({
-            like: +1,
-        },
-        { where: {
-            userLiked
-        }})
-        .then(() => res.status(200).json({ message: 'Like ajouté !'}))
-        .catch(error => res.status(400).json({ error }));
-    }
-}
+//ajouter un like  
+exports.likePost = (req, res) => {
+        const token = req.headers.authorization.split(' ')[1];
+        const decodedToken = jwt.verify(token, `${process.env.SECRET_TOKEN}`);
+        const userId = decodedToken.userId;
+        const postId = req.params.postId;
+        let { userLiked } = {userId, postId};
+
+        if(!userLiked){
+            models.Like.create({
+                UserId: userId,
+                PostId: postId,
+            })
+            .then(() => {
+                models.Post.findOne({
+                    where : {id : postId },
+                })
+                    .then((post)=> {
+                        post.update({
+                            like: post.like + 1,
+                        })
+                        .then(() => res.status(201).json({message: "Like ajouté ! " }))
+                        .catch(error => res.status(400).json({ error}));
+                    })
+                    .catch(error => res.status(500).json({ error }));
+            })
+            .catch(error => res.status(400).json({ error }));
+        }
+};
+
+exports.unlikePost = (req, res) => {
+        
+};

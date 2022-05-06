@@ -29,9 +29,11 @@ db.Sequelize = Sequelize;
 db.User = require("./user")(sequelize, Sequelize.DataTypes);
 db.Post = require("./post")(sequelize, Sequelize.DataTypes);
 db.Comment = require("./comment")(sequelize, Sequelize.DataTypes);
+db.Like = require("./like")(sequelize, Sequelize.DataTypes);
 
 db.User.associate(db);
 db.Post.associate(db);
 db.Comment.associate(db);
+db.Like.associate(db);
 
 module.exports = db;

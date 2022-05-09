@@ -118,7 +118,7 @@ export default {
     border-radius : 40px;
     padding : 10px;
     max-width : 70%;
-    margin: auto;
+    margin: 0px auto 30px auto;
     .feed_createpost{
         display:flex;
         align-items: center;

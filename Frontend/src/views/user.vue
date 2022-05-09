@@ -77,6 +77,14 @@ export default {
             .catch((err) => console.log(err))
         },
     },
+    beforeUpdate(){
+        if(localStorage.getItem("token") == null){
+            alert("Veuillez vous connecter !");
+            this.$router.push("/login");
+        } else{
+            console.log("ok");
+        }
+    }
 }
 </script>
 

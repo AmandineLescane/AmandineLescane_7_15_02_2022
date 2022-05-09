@@ -75,6 +75,7 @@ export default {
             userId : localStorage.getItem("userId"),
             admin : localStorage.getItem("admin"),
             comment_content: "",
+            likes: [],
         }
     },
     created(){
@@ -169,10 +170,11 @@ export default {
         },
         likePost(post){
             let like = {
-                UserId : localStorage.getItem("userId"),
+                UserId : JSON.parse(localStorage.getItem("userId")),
                 PostId : post.id,
-            }
-            fetch("http://localhost:3000/api/like", {
+            };
+            
+            fetch(`http://localhost:3000/api/like/${post.id}`, {
                 method : "POST",
                     body: JSON.stringify(like),
                     headers:{
@@ -183,7 +185,6 @@ export default {
             .then((res)=> {
                 res.json()
                 .then(data => {
-                    console.log(data);
                     if(res.status === 201){
                         document.location.reload();
                         this.$router.push("/feed");
@@ -197,6 +198,14 @@ export default {
             })
         
         },
+    },
+    beforeUpdate(){
+        if(localStorage.getItem("token") == null){
+            alert("Veuillez vous connecter !");
+            this.$router.push("/login");
+        } else{
+            console.log("ok");
+        }
     }
 }
 </script>

@@ -1,4 +1,5 @@
-<template> 
+<template>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     <div class="menu">
         <navBar/>
     </div>
@@ -42,9 +43,9 @@ import Post from '../components/post.vue';
 export default {
     name: "feed",
     components:{
-    navBar,
-    Post
-},
+        navBar,
+        Post,
+    },
     data (){
         return {
         post_content: "",
@@ -128,7 +129,7 @@ export default {
     .feed_typetext{
     width: 90%;
     max-width: 90%;
-    border: solid 3px #f9d7d6;
+    border: solid 3px $border-color;
     border-radius : 10px;
     }
     .feed_buttons{
@@ -141,6 +142,68 @@ export default {
     }
     .input_createpost{
         @include feed_button;
+    }
+}
+.lds-ring {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color : rgba(255, 255, 255, 0.6);
+    animation : fadein 2s forwards;
+}
+@keyframes fadein{
+    0%{
+        z-index: 10000;
+        background: rgba(255, 255, 255, 1);
+    }
+    20%{
+        background: rgba(255, 255, 255, 0.8);
+    }
+    40%{
+        background: rgba(255, 255, 255, 0.6);
+    }
+    60%{
+        background: rgba(255, 255, 255, 0.4);
+    }
+    80%{
+        background: rgba(255, 255, 255, 0.2);
+    }
+    100%{
+        background: rgba(255, 255, 255, 0.2);
+        visibility: hidden;
+    }
+}
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    margin: 8px;
+    border: 8px solid $font-color;
+    border-radius: 50%;
+    border-color: $font-color transparent transparent transparent;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+    0% {
+    transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+        visibility: hidden;
     }
 }
 @media screen and (max-width : 700px) {

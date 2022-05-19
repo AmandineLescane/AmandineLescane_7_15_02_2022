@@ -1,10 +1,10 @@
-# GROUPOMANIA , réseau social d'entreprise.
+# GROUPOMANIA , réseau social d'entreprise  :zap:
 
 ## C'est le 7éme et dernier projet de la formation développeur web d'Open Classroom.
 
 *********************
 
-Ce projet consiste à créer un réseau social d'entreprise dans sa première version. 
+Ce projet consiste à créer un réseau social d'entreprise dans sa première version  :nerd_face: 
 
 Il présente les fonctionnalités suivantes : 
 * Interface d'inscription / de connexion,
@@ -21,32 +21,34 @@ Il présente les fonctionnalités suivantes :
 
 *********************
 
-### Installation :woman_technologist: :
+### Installation  :woman_technologist:  :
 
 Clonez le projet directement depuis Github.
 
-#### Créez la base de donnée Mysql :globe_with_meridians: : 
+#### Créez la base de donnée Mysql  :globe_with_meridians:  : 
 
 À partir des identifiants situés dans le fichier `.env`, créez la base de données Groupomania en écrivant dans votre terminal : 
 
 `CREATE DATABASE groupomania`
 
-#### Côté backend :wrench: : 
+#### Côté backend  :wrench:  : 
 
 Toujours dans le terminal de votre ordinateur entrez maintenant : 
 
-`cd backend`
-`npm install`
-`mkdir images`
-`nodemon server`
+- `cd backend`
+- `npm install`
+- `mkdir images`
+- `nodemon server`
 
 #### Côté frontend 	:sparkles: : 
 
-Enfin, ouvrez un second terminal puis entrez :
+Ensuite, ouvrez un second terminal puis entrez :
 
-`cd Frontend`
-`npm install`
-`npm run dev`
+- `cd Frontend`
+- `npm install`
+- `npm run dev`
+
+Enfin, ouvrez votre moteur de recherche avec l'adresse :  http://localhost:8080/
 
 *********************
 

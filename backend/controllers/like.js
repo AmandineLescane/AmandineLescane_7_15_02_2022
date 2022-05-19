@@ -29,9 +29,25 @@ exports.likePost = (req, res) => {
                     .catch(error => res.status(500).json({ error }));
             })
             .catch(error => res.status(400).json({ error }));
-        }
-};
-
-exports.unlikePost = (req, res) => {
-        
+        } 
+        /*else if (userLiked) {
+            models.Like.destroy({
+                UserId: userId,
+                PostId: postId,
+            })
+            .then(() => {
+                models.Post.findOne({
+                    where : {id : postId },
+                })
+                    .then((post)=> {
+                        post.update({
+                            like: post.like - 1,
+                        })
+                        .then(() => res.status(201).json({message: "Like supprimé ! " }))
+                        .catch(error => res.status(400).json({ error}));
+                    })
+                    .catch(error => res.status(500).json({ error }));
+            })
+            .catch(error => res.status(400).json({ error }));
+        }*/
 };

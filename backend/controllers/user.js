@@ -1,12 +1,10 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-// const cryptojs = require('crypto-js');
 const bcrypt = require('bcrypt');
 const models = require('../models');
 
 //création de l'utilisateur
 exports.signup = (req, res) => {
-        // const emailCrypt = cryptojs.SHA256(req.body.email, process.env.SECRET_TOKEN).toString();
         bcrypt
             .hash(req.body.password, 10)
             .then((hash) => {
@@ -25,8 +23,6 @@ exports.signup = (req, res) => {
 
 //connexion de l'utilisateur
 exports.login = (req, res) => {
-    // const emailCrypt = cryptojs.SHA256(req.body.email, process.env.SECRET_TOKEN).toString();
-    
     models.User.findOne({ where : { email : req.body.email }})
         .then((user) => {
             if(!user) {

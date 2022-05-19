@@ -86,7 +86,6 @@ export default {
             }
         },
         add_img(){
-            console.log (this.$refs.file.files[0])
             this.file = this.$refs.file.files[0];
         },
     }

@@ -122,6 +122,7 @@ export default {
     #error{
         font-weight: 700;
         color : $font-color;
+        text-align: center;
     }
 }
 

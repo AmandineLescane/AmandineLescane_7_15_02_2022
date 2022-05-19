@@ -71,7 +71,6 @@ export default {
                     this.$router.push("/login");
                 }else{
                     alert("Erreur lors de la suppression de votre compte 😰");
-                    console.log(res.json());
                 }
             })
             .catch((err) => console.log(err))

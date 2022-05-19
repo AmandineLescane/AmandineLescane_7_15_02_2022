@@ -100,10 +100,10 @@ export default {
                     })
                     .catch(()=> {
                         localStorage.clear();
-                        return this.formErr ="L'adresse email et le mot de passe renseignés ne sont pas valides";
+                        return this.formErr ="Un problème est survenue lors de la connexion";
                     })
                 } else {
-                    return this.formErr = "Un problème est survenue lors de la connexion";
+                    return this.formErr = "L'adresse email et/ou le mot de passe renseignés ne sont pas valides";
                 };
             })
             .catch(()=> {
@@ -152,6 +152,7 @@ export default {
     #error{
         font-weight: 700;
         color : $font-color;
+        text-align: center;
     }
 }
 

@@ -17,22 +17,23 @@
         </div>
         <div class="post_icon">
             <span class="post_like">
-                <button class="post_button" @click="likePost(post)">
+                <button class="post_button" @click="likePost(post)">J'aime
                     <i class="fa fa-heart"></i>
                 </button>
                 <p class= "likeNbr">{{post.like}}</p>
             </span>
             <button 
-                class="post_button" 
+                class="post_button delete_button" 
                 v-if="post.UserId == userId || admin == 'true'"
                 @click.prevent="deletePost(post)"
-            >
+            >Supprimer
                 <i class="fa fa-trash"></i>
             </button>
         </div>
         <div class="comment_block">
             <div class="comment_content">
                 <input
+                    title="commentaire"
                     class="comment_create" 
                     placeholder="Votre commentaire..."
                     v-model="comment_content"
@@ -254,11 +255,17 @@ export default {
 }
 .post_button {
     border: none; 
+    font-weight:600;
+    font-size:16px;
+    color:$font-color;
     background-color: white;
     cursor: pointer;
     :hover{
         transform: scale(1.1);
     }
+}
+.delete_button {
+    color: black;
 }
 .fa{
     font-size: 20px;

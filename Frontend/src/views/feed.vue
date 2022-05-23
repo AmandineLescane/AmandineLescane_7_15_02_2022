@@ -10,6 +10,7 @@
         <h2>Quoi de neuf ?</h2>
         <form class="feed_createpost">
             <textarea 
+                title="creer_post"
                 class="feed_typetext" 
                 name="post_content"
                 placeholder="Partagez avec la communauté"
@@ -19,7 +20,7 @@
             <input 
                 type="file" 
                 ref="file"
-                accept="image/png, image/jpeg"
+                accept="image/*"
                 @change="add_img()"
             >
             <input

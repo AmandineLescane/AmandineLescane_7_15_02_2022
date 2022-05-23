@@ -9,26 +9,30 @@
             <router-link to="/login"><h5>J'ai déjà un compte</h5></router-link>
         </div>
         <form>
+            <label> Prénom
             <input 
                 type="text"
                 placeholder="Prénom" 
                 v-model="name"
-            >
+            ></label>
+            <label> Nom
             <input 
                 type="text" 
                 placeholder="Nom" 
                 v-model="lastName"
-            >
+            ></label>
+            <label> Email
             <input 
                 type="text" 
                 placeholder="Email" 
                 v-model="email"
-            >
+            ></label>
+            <label> Mot de passe
             <input 
                 type="password"
                 placeholder="Mot de passe" 
                 v-model="password"
-            >
+            ></label>
             <input 
                 class="input_signin" 
                 type="submit" 
@@ -124,7 +128,7 @@ export default {
     padding-bottom: 10px;
     border: solid 2px $border-color;
     max-width : 70%;
-    margin: auto;
+    margin: auto auto 50px auto;
     .auth_title{
         display : flex;
         color: $font-color;
@@ -171,6 +175,7 @@ form{
     flex-direction : column;
     align-items : center;
     margin-bottom: 20px;
+    margin-top: 20px;
     input{
         border: solid 3px $border-color;
         border-radius : 10px;
@@ -186,5 +191,15 @@ form{
             text-align: center;
         }
     }
+}
+label {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 80%;
+    padding: 5px;
+    color: $font-color;
+    font-weight: 600;
+    font-size: 18px;
 }
 </style>

@@ -9,16 +9,18 @@
             <router-link to="/signup"><h5>Je n'ai pas de compte</h5></router-link>
         </div>
         <form>
+            <label>Email
             <input 
                 type="text" 
                 placeholder="Email"
                 v-model="email"
-            >
+            ></label>
+            <label>Mot de passe
             <input 
                 type="password" 
                 placeholder="Mot de passe"
                 v-model="password"
-            >
+            ></label>
             <input 
                 class="input_login" 
                 type="submit" 
@@ -141,6 +143,7 @@ form{
     flex-direction : column;
     align-items : center;
     margin-bottom: 20px;
+    margin-top: 20px;
     input{
         border: solid 3px $border-color;
         border-radius : 10px;
@@ -156,5 +159,15 @@ form{
             text-align: center;
         }
     }
+}
+label {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 80%;
+    padding: 5px;
+    color: $font-color;
+    font-weight: 600;
+    font-size: 18px;
 }
 </style>

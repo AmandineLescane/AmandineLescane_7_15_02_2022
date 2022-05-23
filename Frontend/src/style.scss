@@ -9,6 +9,7 @@ $border-color: #f9d7d6;
     background-color : $border-color;
     color: black;
     font-weight: bold;
+    font-size: 16px;
     cursor: pointer;
     transition: cubic-bezier(.03,.36,.63,1.17) .3s;
     &:hover{
